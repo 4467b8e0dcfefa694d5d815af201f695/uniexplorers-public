@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.32.0 (HEAD)
+  labels:
+    io.kompose.network/uniexplorers-backend-default: "true"
+    io.kompose.service: mongodb
+  name: mongodb
+spec:
+  containers:
+    - env:
+        - name: MONGO_HOST
+          valueFrom:
+            configMapKeyRef:
+              key: MONGO_HOST
+              name: mongo-env
+        - name: MONGO_INITDB_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              key: MONGO_INITDB_DATABASE
+              name: mongo-env
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          valueFrom:
+            configMapKeyRef:
+              key: MONGO_INITDB_ROOT_PASSWORD
+              name: mongo-env
+        - name: MONGO_INITDB_ROOT_USERNAME
+          valueFrom:
+            configMapKeyRef:
+              key: MONGO_INITDB_ROOT_USERNAME
+              name: mongo-env
+        - name: MONGO_PORT
+          valueFrom:
+            configMapKeyRef:
+              key: MONGO_PORT
+              name: mongo-env
+      livenessProbe:
+        exec:
+          command:
+            - sh
+            - -c
+            - "echo 'db.stats().ok' | mongosh localhost:27017/test --quiet"
+        failureThreshold: 5
+        periodSeconds: 10
+        timeoutSeconds: 10
+      image: jjlim159/uniexplorers-mongodb:latest
+      name: mongodb
+      ports:
+        - containerPort: 27017
+      volumeMounts:
+        - mountPath: /data/db
+          name: mongo-data
+  restartPolicy: OnFailure
+  volumes:
+    - name: mongo-data
+      persistentVolumeClaim:
+        claimName: mongo-data

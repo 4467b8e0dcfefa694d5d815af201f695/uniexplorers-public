@@ -1,0 +1,116 @@
+syntax = "proto3";
+
+option go_package = ".";
+
+import "proto/google/api/annotations.proto";
+
+service NotificationService {
+    rpc StreamNotification (StreamNotificationRequest) returns (stream StreamNotificationResponse) {}
+    rpc PublishNotification (PublishNotificationRequest) returns (PublishNotificationResponse) {
+      option (google.api.http) = {
+        post:"/publish/notification"
+        body:"*"
+       };
+    }
+    rpc AddNotifications (AddNotificationsRequest) returns (AddNotificationsResponse) {
+      option (google.api.http) = {
+        post:"/add/notifications"
+        body:"*"
+       };
+    }
+    rpc GetNotifications (GetNotificationsRequest) returns (GetNotificationsResponse) {
+      option (google.api.http) = {
+        post:"/get/notifications"
+        body:"*"
+       };
+    }
+    rpc AddSubscriber (AddSubscriberRequest) returns (AddSubscriberResponse) {
+      option (google.api.http) = {
+        post:"/add/subscriber"
+        body:"*"
+       };
+    }
+    rpc GetSubscribers (GetSubscribersRequest) returns (GetSubscribersResponse) {
+      option (google.api.http) = {
+        post:"/get/subscribers"
+        body:"*"
+       };
+    }
+}
+
+message WatchThread {
+  int32 thread_id = 1;
+  string user_email = 2;
+}
+
+message Notification {
+  int32 id = 1;
+  int32 thread_id = 2;
+  string comment_by = 3;
+  string user_email = 4;
+  string message = 5;
+  string created_at = 6;
+  string uni_name = 7;
+}
+
+message StreamNotificationRequest {
+  int32 thread_id = 1;
+  string user_email = 2; // for user
+}
+
+message StreamNotificationResponse {
+  int32 thread_id = 1;
+  string comment_by = 2;  // from user
+  string message = 3;
+  string created_at = 4;
+  string uni_name = 5;
+}
+
+message AddNotificationsRequest {
+  int32 thread_id = 1;
+  string comment_by = 2;  // for user
+  string message = 3;
+  string uni_name = 4;
+}
+
+message AddNotificationsResponse {
+  string status = 1;
+}
+
+message GetNotificationsRequest {
+  int32 thread_id = 1;
+  string user_email = 2;  // for user
+}
+
+message GetNotificationsResponse {
+  repeated Notification notifications = 1;
+}
+
+message PublishNotificationRequest {
+  int32 thread_id = 1;
+  string comment_by = 2;  // from user
+  string message = 3;
+  string created_at = 4;
+  string uni_name = 5;
+}
+
+message PublishNotificationResponse {
+  string status = 1;
+}
+
+message AddSubscriberRequest {
+  int32 thread_id = 1;
+  string user_email = 2;  // user subscriber
+}
+
+message AddSubscriberResponse {
+  string status = 1;
+}
+
+message GetSubscribersRequest {
+  int32 thread_id = 1;
+}
+
+message GetSubscribersResponse {
+  repeated WatchThread subscribers = 1;  // list of user_email subscribers
+}

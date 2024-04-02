@@ -1,0 +1,7 @@
+export {default as SingleReview } from './singleReview.vue'
+export {default as CtaBanner } from './ctaBanner.vue'
+export {default as UniCarousel } from './UniCarousel.vue'
+export {default as ReviewModal } from './ReviewModal.vue'
+export {default as NearbyPlaceTab } from './NearbyPlaceTab.vue'
+export {default as CourseMapping } from './CourseMapping.vue'
+export {default as joinTelegramCard } from './joinTelegramCard.vue'

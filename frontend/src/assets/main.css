@@ -1,0 +1,208 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Caudex:wght@700&display=swap');
+@import './base.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+* {
+  font-family: 'Poppins', sans-serif;
+}
+
+#app {
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 0;
+  font-weight: normal;
+  min-height: 100vh;
+}
+
+.rainbow-border:after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: calc(100%);
+  width: calc(100%);
+  background: linear-gradient(60deg, #f79533, #f37055, #ef4e7b, #a166ab, #5073b8, #1098ad, #07b39b, #6fba82);
+  border-radius: 3px;
+  z-index: 0;
+  animation: animatedgradient 3s ease alternate infinite;
+  background-size: 300% 300%;
+}
+
+@keyframes animatedgradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes placeHolderShimmer{
+  0%{
+      background-position: -50% 0
+  }
+  100%{
+      background-position: 50% 0
+  }
+}
+
+.lazyload {
+  flex-grow : 1;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-name: placeHolderShimmer;
+  animation-timing-function: linear;
+  /* background: #f6f7f8; */
+  background: linear-gradient(to right, #ddd 8%, #ccc 18%, #ddd 33%);
+  /* FOR SMOOTHER SWOOSHES, THE WIDTH NEEDS TO BE IN PIXELS. */
+  background-size: 800px 104px;
+  /* height: auto; */
+  /* position: relative; */
+}
+
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1)
+}
+
+.fade-enter-from .modalCard, .fade-leave-to .modalCard {
+  opacity: 0;
+  transform: translateY(2rem);
+}
+
+.fade-enter-active .modalCard, .fade-leave-active .modalCard {
+  transition-delay: 1s;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1)
+}
+
+.scrollbox {
+  background: /* Shadow covers */
+  linear-gradient(white 30%, rgba(255, 255, 255, 0)), linear-gradient(rgba(255, 255, 255, 0), white 70%) 0 100%, /* Shadows */
+  radial-gradient(50% 0, farthest-side, rgba(0, 0, 0, .2), rgba(0, 0, 0, 0)), radial-gradient(50% 100%, farthest-side, rgba(0, 0, 0, .2), rgba(0, 0, 0, 0)) 0 100%;
+  background: /* Shadow covers */
+  linear-gradient(white 30%, rgba(255, 255, 255, 0)), linear-gradient(rgba(255, 255, 255, 0), white 70%) 0 100%, /* Shadows */
+  radial-gradient(farthest-side at 50% 0, rgba(0, 0, 0, .2), rgba(0, 0, 0, 0)), radial-gradient(farthest-side at 50% 100%, rgba(0, 0, 0, .2), rgba(0, 0, 0, 0)) 0 100%;
+  background-repeat: no-repeat;
+  background-color: white;
+  background-size: 100% 40px, 100% 40px, 100% 14px, 100% 14px;
+  /* Opera doesn't support this in the shorthand */
+  background-attachment: local, local, scroll, scroll;
+}
+
+/* To: "opacity-100 translate-y-0 sm:scale-100" */
+
+
+@layer components {
+  p > a {
+    @apply underline text-darkgreen font-bold
+  }
+
+  p > a {
+    background: url('/vectors/openlink.svg') right center no-repeat;
+    display: inline-block;
+    padding-right: 24px;
+    
+  }
+
+  p > ul, ol {
+    @apply list-inside pl-4
+  }
+
+  p > ul {
+    @apply list-disc
+  }
+
+  p > ol {
+    @apply list-decimal
+  }
+
+  .copyCard {
+    @apply text-darkgreen text-2xl sm:text-4xl md:text-5xl font-caudex font-bold mb-4;
+  }
+
+  .copyDesc {
+    @apply text-content text-lg sm:text-xl md:text-2xl opacity-60;
+  }
+
+  .copySVG {
+    @apply block absolute opacity-30 max-w-[50%] max-h-[50%] lg:relative lg:max-w-full lg:max-h-full lg:opacity-100;
+  }
+
+  h1 {
+    @apply font-caudex text-4xl font-bold text-darkgreen my-4;
+  }
+
+  .heroText {
+    @apply font-caudex text-5xl md:text-7xl xl:text-6xl font-bold text-darkgreen
+  }
+
+  .textInput {
+    @apply bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 focus:ring-darkgreen focus:border-darkgreen transition-all;
+  }
+
+  .validator {
+    @apply invalid:[&:not(:placeholder-shown):not(:focus)]:ring-red invalid:[&:not(:placeholder-shown):not(:focus)]:border-red;
+  }
+
+  .textInput-valid {
+    @apply textInput validator
+  }
+
+  .dialogWrapper {
+    @apply fixed top-0 z-10 backdrop-blur bg-darkgreen/50 w-screen min-h-screen flex justify-center items-center
+  }
+
+  .card {
+    @apply rounded-lg p-4 border-2 border-gray-300
+  }
+
+  .wrapper {
+    @apply w-full h-full m-0 p-0 relative
+  }
+
+  .shadow {
+    @apply shadow-[rgba(60,64,67,0.3)_0px_1px_2px_0px,rgba(60,64,67,0.15)_0px_2px_6px_2px];
+  }
+
+  .profileCards {
+    @apply card bg-white border-gray-300 shadow-sm grow
+  }
+
+  customScrollbar::-webkit-scrollbar {
+    @apply w-[5px] bg-white absolute
+  }
+  customScrollbar::-webkit-scrollbar-thumb {
+    @apply absolute rounded-lg bg-darkgreen/75 
+  }
+  customScrollbar::-webkit-scrollbar-track {
+    @apply bg-lightgreen/30 rounded-lg
+  }
+
+  .btn {
+    @apply select-none tracking-wide rounded-lg px-4 py-1 w-fit h-fit font-medium border border-lightgreenshadow
+  }
+
+  .btnAction {
+    @apply btn bg-lightgreen text-darkgreen hover:bg-darkgreen hover:text-lightgreen hover:font-semibold active:bg-[#193039] active:text-white
+  }
+
+  .btnActionInvert {
+    @apply btn bg-darkgreen text-white hover:bg-lightgreen hover:text-darkgreen hover:font-semibold active:bg-[#193039] active:text-white
+  }
+
+  .btnNormal {
+    @apply btn text-content bg-[#f3f4f6] hover:bg-[#f6f8fa] active:border-[#1f232826] active:bg-[#ebecf0]
+  }
+
+  .btnDanger {
+    @apply btn text-danger bg-white hover:bg-danger hover:text-white hover:font-semibold hover:border-dangerActive active:border-[#ff7b72] active:bg-dangerActive
+  }
+
+  :disabled {
+    @apply text-lightgrey pointer-events-none
+  }
+
+}

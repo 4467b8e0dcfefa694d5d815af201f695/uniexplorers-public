@@ -1,0 +1,10 @@
+apiVersion: v1
+data:
+  POSTGRES_DB: uniexplorers
+  POSTGRES_PASSWORD: 
+  POSTGRES_USER: uniexplorers
+kind: ConfigMap
+metadata:
+  labels:
+    io.kompose.service: forum-db-forum-db-env
+  name: forum-db-env

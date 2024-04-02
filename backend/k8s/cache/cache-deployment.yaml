@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f ../docker-compose.yml
+    kompose.version: 1.32.0 (HEAD)
+  labels:
+    io.kompose.service: cache
+  name: cache
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: cache
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f ../docker-compose.yml
+        kompose.version: 1.32.0 (HEAD)
+      labels:
+        io.kompose.network/uniexplorers-backend-default: "true"
+        io.kompose.service: cache
+    spec:
+      containers:
+        - args:
+            - /bin/sh
+            - -c
+            - redis-server --requirepass $(REDIS)_PASSWORD
+          env:
+            - name: REDIS_HOST
+              valueFrom:
+                configMapKeyRef:
+                  key: REDIS_HOST
+                  name: redis-env
+            - name: REDIS_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  key: REDIS_PASSWORD
+                  name: redis-env
+            - name: REDIS_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: REDIS_PORT
+                  name: redis-env
+          livenessProbe:
+            exec:
+              command:
+                - redis-cli
+                - -a
+                - $REDIS_PASSWORD
+                - --raw
+                - incr
+                - ping
+            failureThreshold: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+          name: cache
+          image: jjlim159/uniexplorers-cache:latest
+          ports:
+            - containerPort: 6379
+      restartPolicy: Always

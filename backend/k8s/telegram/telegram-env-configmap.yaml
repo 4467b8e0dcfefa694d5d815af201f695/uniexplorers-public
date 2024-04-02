@@ -1,0 +1,17 @@
+apiVersion: v1
+data:
+  TELEGRAM_API_HASH: 
+  TELEGRAM_API_ID: ""
+  TELEGRAM_PHONE_NUMBER: ""
+  UNI_DB_CLIENT: pg
+  UNI_DB_EXTERNAL_PORT: "5434"
+  UNI_DB_HOST: uni-db
+  UNI_DB_NAME: uniexplorers
+  UNI_DB_PASSWORD: 
+  UNI_DB_PORT: "5432"
+  UNI_DB_USER: uniexplorers
+kind: ConfigMap
+metadata:
+  labels:
+    io.kompose.service: telegram--env
+  name: telegram-env

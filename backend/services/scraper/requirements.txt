@@ -1,0 +1,6 @@
+python-dotenv
+selenium
+pandas
+pyarrow
+pymongo
+schedule

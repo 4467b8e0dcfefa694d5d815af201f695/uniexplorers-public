@@ -1,0 +1,99 @@
+{
+  "Europe": [
+    {
+      "name": "Paris",
+      "country": "France", 
+      "image": "../../cities/paris.jpg"
+    },
+    {
+      "name": "Rome",
+      "country": "Italy",
+      "image": "../../cities/rome.jpg"
+    },
+    {
+      "name": "Barcelona",
+      "country": "Spain", 
+      "image": "../../cities/barcelona.jpg"
+    },
+    {
+      "name": "Vienna",
+      "country": "Austria",
+      "image": "../../cities/vienna.jpg"
+    },
+    {
+      "name": "Prague",
+      "country": "Czech Republic",
+      "image": "../../cities/prague.jpg"
+    },
+    {
+      "name": "Athens",
+      "country": "Greece", 
+      "image": "../../cities/athens.jpg"
+    }
+  ],
+  "Asia": [
+    {
+      "name": "Tokyo",
+      "country": "Japan",
+      "image": "../../cities/tokyo.jpg"
+    },
+    {
+      "name": "Shanghai",
+      "country": "China",
+      "image": "../../cities/shanghai.jpg"
+    },
+    {
+      "name": "Seoul",
+      "country": "South Korea",
+      "image": "../../cities/seoul.jpg"
+    },
+    {
+      "name": "Osaka",
+      "country": "Japan",
+      "image": "../../cities/osaka.jpg"
+    },
+    {
+      "name": "Busan",
+      "country": "Korea",
+      "image": "../../cities/busan.jpg"
+    },
+    {
+      "name": "Beijing",
+      "country": "China",
+      "image": "../../cities/beijing.jpg"
+    }
+  ],
+  
+  "America": [
+    {
+      "name": "New York City",
+      "state": "New York",
+      "image": "../../cities/new-york.jpg"
+    },
+    {
+      "name": "Los Angeles",
+      "state": "California",
+      "image": "../../cities/los-angeles.jpg"
+    },
+    {
+      "name": "Chicago",
+      "state": "Illinois",
+      "image": "../../cities/chicago.jpg"
+    },
+    {
+      "name": "Page",
+      "state": "Arizona",
+      "image": "../../cities/page.jpg"
+    },
+    {
+      "name": "Philadelphia",
+      "state": "Pennsylvania",
+      "image": "../../cities/philadelphia.jpg"
+    },
+    {
+      "name": "Dallas",
+      "state": "Texas",
+      "image": "../../cities/dallas.jpg"
+    }
+  ]
+}

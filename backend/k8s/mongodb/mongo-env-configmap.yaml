@@ -1,0 +1,12 @@
+apiVersion: v1
+data:
+  MONGO_HOST: mongodb
+  MONGO_INITDB_DATABASE: uniexplorers
+  MONGO_INITDB_ROOT_PASSWORD: 
+  MONGO_INITDB_ROOT_USERNAME: uniexplorers
+  MONGO_PORT: "27017"
+kind: ConfigMap
+metadata:
+  labels:
+    io.kompose.service: mongodb-mongo-env
+  name: mongo-env

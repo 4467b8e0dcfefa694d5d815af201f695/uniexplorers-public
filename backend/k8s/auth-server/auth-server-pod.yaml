@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.32.0 (HEAD)
+  labels:
+    io.kompose.network/uniexplorers-backend-default: "true"
+    io.kompose.service: auth-server
+  name: auth-server
+spec:
+  containers:
+    - env:
+        - name: CLERK_SECRET_KEY
+          valueFrom:
+            configMapKeyRef:
+              key: CLERK_SECRET_KEY
+              name: auth-env
+        - name: ORIGIN
+          valueFrom:
+            configMapKeyRef:
+              key: ORIGIN
+              name: auth-env
+        - name: SERVER_PORT
+          valueFrom:
+            configMapKeyRef:
+              key: SERVER_PORT
+              name: auth-env
+      image: jjlim159/uniexplorers-auth-server:latest
+      name: clerk-auth
+      ports:
+        - containerPort: 8089
+  restartPolicy: OnFailure

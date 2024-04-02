@@ -1,0 +1,7 @@
+quart
+quart-cors
+telethon
+python-dotenv
+psycopg2-binary
+asyncpg
+requests

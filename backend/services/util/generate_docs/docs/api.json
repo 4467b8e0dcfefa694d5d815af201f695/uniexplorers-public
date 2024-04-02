@@ -1,0 +1,2414 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Uniexplorers API",
+    "description": "The Uniexplorers API, without API gateway",
+    "version": "0.1.0"
+  },
+  "tags": [
+    {
+      "name": "comments",
+      "description": "Forum comments operations"
+    },
+    {
+      "name": "reacts",
+      "description": "Forum comment reactions operations"
+    },
+    {
+      "name": "ranking",
+      "description": "Forum thread ranking operations"
+    },
+    {
+      "name": "forum_threads",
+      "description": "Operations related to forum threads"
+    },
+    {
+      "name": "forum_watch",
+      "description": "Operations related to watching a forum thread"
+    },
+    {
+      "name": "course_mapping",
+      "description": "Course mapping operations related routes"
+    },
+    {
+      "name": "geocode",
+      "description": "Retrieve geocode related data"
+    },
+    {
+      "name": "nearby",
+      "description": "Retrieve data related to nearby locations"
+    },
+    {
+      "name": "reviews",
+      "description": "University reviews related routes"
+    },
+    {
+      "name": "uni_majors",
+      "description": "University majors related routes"
+    },
+    {
+      "name": "uni_tags",
+      "description": "University tags related routes"
+    },
+    {
+      "name": "uni_users",
+      "description": "University users related routes"
+    },
+    {
+      "name": "university",
+      "description": "University data related routes"
+    },
+    {
+      "name": "dev",
+      "description": "Route to be disabled during prod deployment"
+    },
+    {
+      "name": "users",
+      "description": "Operations related to users"
+    },
+    {
+      "name": "recommender",
+      "description": "Recommender API"
+    },
+    {
+      "name": "health",
+      "description": "Healthcheck"
+    },
+    {
+      "name": "utility",
+      "description": "Utility"
+    }
+  ],
+  "paths": {
+    "/forum/comments": {
+      "get": {
+        "summary": "Retrieve forum comments",
+        "tags": [
+          "comments"
+        ],
+        "description": "Retrieve all forum comments or user-specific comments if authenticated as an admin.",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of forum comments"
+          },
+          "401": {
+            "description": "Unauthorized request"
+          },
+          "404": {
+            "description": "Database query failed"
+          }
+        }
+      },
+      "post": {
+        "summary": "Add a new comment",
+        "tags": [
+          "comments"
+        ],
+        "description": "Add a new comment to the forum.",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "comment_text": {
+                    "type": "string",
+                    "description": "The text of the comment."
+                  },
+                  "parent_id": {
+                    "type": "string",
+                    "description": "The parent comment ID if this is a reply."
+                  },
+                  "thread_id": {
+                    "type": "string",
+                    "description": "The ID of the thread this comment belongs to."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Comment added successfully"
+          },
+          "400": {
+            "description": "Bad request, missing required fields"
+          },
+          "401": {
+            "description": "Unauthorized request"
+          },
+          "404": {
+            "description": "Invalid thread_id field"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update a comment",
+        "tags": [
+          "comments"
+        ],
+        "description": "Update the text of a comment.",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "comment_id": {
+                    "type": "string",
+                    "description": "The ID of the comment to be updated."
+                  },
+                  "comment_text": {
+                    "type": "string",
+                    "description": "The updated text of the comment."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Comment updated successfully"
+          },
+          "400": {
+            "description": "Bad request, missing required fields or insufficient permissions"
+          },
+          "401": {
+            "description": "Unauthorized request"
+          },
+          "404": {
+            "description": "Comment does not exist"
+          }
+        }
+      }
+    },
+    "/forum/comments/{thread_id}": {
+      "get": {
+        "summary": "Get comments for a specific forum thread",
+        "tags": [
+          "comments"
+        ],
+        "description": "Retrieve comments for a specific forum thread, including nested comments.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "thread_id",
+            "required": true,
+            "description": "ID of the forum thread to retrieve comments for.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Comments retrieved successfully."
+          },
+          "404": {
+            "description": "Forum comment database query failed."
+          }
+        }
+      }
+    },
+    "/forum/comments/like": {
+      "post": {
+        "summary": "Like or unlike a forum comment",
+        "tags": [
+          "comments",
+          "reacts"
+        ],
+        "description": "Toggle the like status for a forum comment. If the user has already liked the comment, it unlikes it; otherwise, it likes the comment.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "comment_id": {
+                    "type": "string",
+                    "description": "ID of the comment to like/unlike."
+                  },
+                  "user_email": {
+                    "type": "string",
+                    "description": "Email of the user performing the action."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Toggle successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "Indicates if the toggle was successful."
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "A message indicating the result of the toggle."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing comment_id or user_email in the request body."
+          },
+          "500": {
+            "description": "Toggling like on the comment failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "Indicates if the toggle failed."
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "A message indicating the reason for failure."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/forum/comments/dislike": {
+      "post": {
+        "summary": "Dislike or remove dislike from a forum comment",
+        "tags": [
+          "comments",
+          "reacts"
+        ],
+        "description": "Toggle the dislike status for a forum comment. If the user has already disliked the comment, it removes the dislike; otherwise, it dislikes the comment.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "comment_id": {
+                    "type": "string",
+                    "description": "ID of the comment to dislike/remove dislike from."
+                  },
+                  "user_email": {
+                    "type": "string",
+                    "description": "Email of the user performing the action."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Toggle successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "Indicates if the toggle was successful."
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "A message indicating the result of the toggle."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing comment_id or user_email in the request body."
+          },
+          "500": {
+            "description": "Toggling dislike on the comment failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "Indicates if the toggle failed."
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "A message indicating the reason for failure."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/forum/comments_liked/{user_email}": {
+      "get": {
+        "summary": "Get liked comments by user",
+        "tags": [
+          "comments",
+          "reacts"
+        ],
+        "description": "Retrieve the comments liked by a specific user based on their email.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "user_email",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Email of the user whose liked comments are to be retrieved."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved liked comments.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "Indicates if the operation was successful."
+                    },
+                    "comments": {
+                      "type": "array",
+                      "description": "The array of comments liked by the user."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Failed to fetch liked comments.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "Indicates if the operation failed."
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "A message indicating the reason for failure."
+                    },
+                    "stack": {
+                      "type": "string",
+                      "description": "The error stack trace."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/forum/comments_disliked/{user_email}": {
+      "get": {
+        "summary": "Get disliked comments by user",
+        "tags": [
+          "comments",
+          "reacts"
+        ],
+        "description": "Retrieve the comments disliked by a specific user based on their email.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "user_email",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Email of the user whose disliked comments are to be retrieved."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved disliked comments.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "Indicates if the operation was successful."
+                    },
+                    "comments": {
+                      "type": "array",
+                      "description": "The array of comments disliked by the user."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Failed to fetch disliked comments.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "Indicates if the operation failed."
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "A message indicating the reason for failure."
+                    },
+                    "stack": {
+                      "type": "string",
+                      "description": "The error stack trace."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ranking": {
+      "get": {
+        "summary": "Get ranked forum threads",
+        "tags": [
+          "ranking"
+        ],
+        "description": "Retrieve ranked forum threads based on activity score.",
+        "responses": {
+          "200": {
+            "description": "A list of ranked forum threads",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "thread_id": {
+                        "type": "integer",
+                        "description": "The ID of the forum thread."
+                      },
+                      "university_name": {
+                        "type": "string",
+                        "description": "The name of the university associated with the thread."
+                      },
+                      "activity_score": {
+                        "type": "number",
+                        "format": "float",
+                        "description": "The calculated activity score of the thread."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "Indicates whether the request was successful."
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Error message indicating server error."
+                    },
+                    "stack": {
+                      "type": "string",
+                      "description": "Stack trace of the error."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/forum/threads": {
+      "get": {
+        "summary": "Get forum threads",
+        "tags": [
+          "forum_threads"
+        ],
+        "description": "Retrieve all forum threads or user-specific threads if authenticated as an admin.",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of forum threads"
+          },
+          "401": {
+            "description": "Unauthorized request"
+          },
+          "404": {
+            "description": "Database query failed"
+          }
+        }
+      },
+      "post": {
+        "summary": "Add a new forum thread",
+        "tags": [
+          "forum_threads"
+        ],
+        "description": "Add a new forum thread.",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "forum_title": {
+                    "type": "string",
+                    "description": "The title of the forum thread."
+                  },
+                  "forum_text": {
+                    "type": "string",
+                    "description": "The text of the forum thread."
+                  },
+                  "forum_text_raw": {
+                    "type": "string",
+                    "description": "The raw text of the forum thread."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Forum thread added successfully"
+          },
+          "400": {
+            "description": "Bad request, missing required fields"
+          },
+          "401": {
+            "description": "Unauthorized request"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update a forum thread",
+        "tags": [
+          "forum_threads"
+        ],
+        "description": "Update the text of a forum thread.",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "thread_id": {
+                    "type": "string",
+                    "description": "The ID of the forum thread to be updated."
+                  },
+                  "forum_text": {
+                    "type": "string",
+                    "description": "The updated text of the forum thread."
+                  },
+                  "forum_text_raw": {
+                    "type": "string",
+                    "description": "The updated raw text of the forum thread."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Forum thread updated successfully"
+          },
+          "400": {
+            "description": "Bad request, missing required fields or insufficient permissions"
+          },
+          "401": {
+            "description": "Unauthorized request"
+          },
+          "404": {
+            "description": "Forum thread does not exist"
+          }
+        }
+      }
+    },
+    "/forum/threads/{university}": {
+      "get": {
+        "summary": "Get forum threads of a specific university",
+        "tags": [
+          "forum_threads"
+        ],
+        "description": "Retrieve forum threads belonging to a specific university.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "university",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The name of the university."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of forum threads of the specified university",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "thread_id": {
+                        "type": "integer",
+                        "description": "The ID of the forum thread."
+                      },
+                      "university_name": {
+                        "type": "string",
+                        "description": "The name of the university associated with the thread."
+                      },
+                      "forum_title": {
+                        "type": "string",
+                        "description": "The title of the forum thread."
+                      },
+                      "forum_text": {
+                        "type": "string",
+                        "description": "The text of the forum thread."
+                      },
+                      "forum_text_raw": {
+                        "type": "string",
+                        "description": "The raw text of the forum thread."
+                      },
+                      "comment_count": {
+                        "type": "integer",
+                        "description": "The number of comments on the thread."
+                      },
+                      "thread_created": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "The timestamp when the thread was created."
+                      },
+                      "thread_updated": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "The timestamp when the thread was last updated."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No forum threads found for the specified university"
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "Indicates whether the request was successful."
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Error message indicating server error."
+                    },
+                    "stack": {
+                      "type": "string",
+                      "description": "Stack trace of the error."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/forum/{thread_id}": {
+      "get": {
+        "summary": "Get forum thread details",
+        "tags": [
+          "forum_threads"
+        ],
+        "description": "Retrieve details of a specific forum thread.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "thread_id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The ID of the forum thread."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Details of the specified forum thread",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "thread_id": {
+                      "type": "integer",
+                      "description": "The ID of the forum thread."
+                    },
+                    "university_name": {
+                      "type": "string",
+                      "description": "The name of the university associated with the thread."
+                    },
+                    "forum_title": {
+                      "type": "string",
+                      "description": "The title of the forum thread."
+                    },
+                    "forum_text": {
+                      "type": "string",
+                      "description": "The text of the forum thread."
+                    },
+                    "forum_text_raw": {
+                      "type": "string",
+                      "description": "The raw text of the forum thread."
+                    },
+                    "comment_count": {
+                      "type": "integer",
+                      "description": "The number of comments on the thread."
+                    },
+                    "thread_created": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "The timestamp when the thread was created."
+                    },
+                    "thread_updated": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "The timestamp when the thread was last updated."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Forum thread not found"
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "Indicates whether the request was successful."
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Error message indicating server error."
+                    },
+                    "stack": {
+                      "type": "string",
+                      "description": "Stack trace of the error."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/forum/watch_thread": {
+      "post": {
+        "summary": "Toggle watch status for a forum thread",
+        "tags": [
+          "forum_threads",
+          "forum_watch"
+        ],
+        "description": "Add or remove a watch for a specific forum thread.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "thread_id": {
+                    "type": "integer",
+                    "description": "The ID of the forum thread to watch."
+                  },
+                  "user_email": {
+                    "type": "string",
+                    "description": "The email of the user watching the thread."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Watch status toggled successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Message indicating the status of the watch operation."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "description": "Error message indicating server error."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/forum/watch_thread/check/{thread_id}": {
+      "get": {
+        "summary": "Check if a user is watching a forum thread",
+        "tags": [
+          "forum_threads",
+          "forum_watch"
+        ],
+        "description": "Check whether a user is watching a specific forum thread.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "thread_id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The ID of the forum thread to check."
+          },
+          {
+            "in": "query",
+            "name": "user_email",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The email of the user to check."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Watch status checked successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "isWatching": {
+                      "type": "boolean",
+                      "description": "Indicates whether the user is watching the thread."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "description": "Error message indicating server error."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/course_mapping/country/{country}": {
+      "get": {
+        "summary": "Get course mapping data by country",
+        "tags": [
+          "course_mapping"
+        ],
+        "description": "Retrieve course mapping data for a specific country.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "country",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The name of the country."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response with course mapping data."
+          },
+          "404": {
+            "description": "Course mapping data not found"
+          }
+        }
+      }
+    },
+    "/course_mapping/course_area/{course_area}": {
+      "get": {
+        "summary": "Get course mapping data by course area",
+        "tags": [
+          "course_mapping"
+        ],
+        "description": "Retrieve course mapping data for a specific course area.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "course_area",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The course area."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response with course mapping data."
+          },
+          "404": {
+            "description": "Course mapping data not found"
+          }
+        }
+      }
+    },
+    "/course_mapping/university/{university}": {
+      "get": {
+        "summary": "Get course mapping data by university name",
+        "tags": [
+          "course_mapping"
+        ],
+        "description": "Retrieve course mapping data for a specific university.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "university",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The name of the university."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response with course mapping data."
+          },
+          "404": {
+            "description": "Course mapping data not found"
+          }
+        }
+      }
+    },
+    "/course_mapping/course_title/{course_title}": {
+      "get": {
+        "summary": "Get course mapping data by course title",
+        "tags": [
+          "course_mapping"
+        ],
+        "description": "Retrieve course mapping data for a specific course title.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "course_title",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The title of the course."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response with course mapping data."
+          },
+          "404": {
+            "description": "Course mapping data not found"
+          }
+        }
+      }
+    },
+    "/nearbysearch": {
+      "get": {
+        "summary": "Perform a nearby search",
+        "description": "Perform a nearby search using Google Places API.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "keyword",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The keyword to search for."
+          },
+          {
+            "in": "query",
+            "name": "lat",
+            "schema": {
+              "type": "number"
+            },
+            "description": "The latitude of the location to search around."
+          },
+          {
+            "in": "query",
+            "name": "lng",
+            "schema": {
+              "type": "number"
+            },
+            "description": "The longitude of the location to search around."
+          },
+          {
+            "in": "query",
+            "name": "radius",
+            "schema": {
+              "type": "number"
+            },
+            "description": "The radius of the search area, in meters."
+          },
+          {
+            "in": "query",
+            "name": "type",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The type of place to search for (e.g., restaurant, bar)."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response with nearby places data."
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/geocode/city/{city}": {
+      "get": {
+        "summary": "Get geocode data for a city",
+        "tags": [
+          "geocode"
+        ],
+        "description": "Get geocode data (e.g., latitude, longitude) for a specified city.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "city",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The name of the city."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response with city geocode data."
+          },
+          "404": {
+            "description": "City geocode data not found"
+          }
+        }
+      }
+    },
+    "/geocode/university/{university}": {
+      "get": {
+        "summary": "Get geocode data for a university",
+        "tags": [
+          "geocode"
+        ],
+        "description": "Get geocode data (e.g., latitude, longitude) for a specified university.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "university",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The name of the university."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response with university geocode data."
+          },
+          "404": {
+            "description": "University geocode data not found"
+          }
+        }
+      }
+    },
+    "/nearby/city/{city}": {
+      "get": {
+        "summary": "Get nearby data for a city",
+        "tags": [
+          "nearby"
+        ],
+        "description": "Get nearby data (e.g., attractions, landmarks) for a specified city.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "city",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The name of the city."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response with city nearby data."
+          },
+          "404": {
+            "description": "City nearby data not found"
+          }
+        }
+      }
+    },
+    "/nearby/university/{university}": {
+      "get": {
+        "summary": "Get nearby data for a university",
+        "tags": [
+          "nearby"
+        ],
+        "description": "Get nearby data (e.g., attractions, landmarks) for a specified university.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "university",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The name of the university."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response with university nearby data."
+          },
+          "404": {
+            "description": "University nearby data not found"
+          }
+        }
+      }
+    },
+    "/place_photos": {
+      "get": {
+        "summary": "Get photos for a place",
+        "description": "Get photos for a specified place using its place ID.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "place_id",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The ID of the place."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response with photo references.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "description": "A photo reference for the place."
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/reviews": {
+      "get": {
+        "summary": "Get reviews",
+        "tags": [
+          "reviews"
+        ],
+        "description": "Retrieve all reviews or user-specific reviews if authenticated as an admin.",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of reviews"
+          },
+          "401": {
+            "description": "Unauthorized request"
+          },
+          "404": {
+            "description": "Review database query failed"
+          }
+        }
+      },
+      "post": {
+        "summary": "Add a new review",
+        "tags": [
+          "reviews"
+        ],
+        "description": "Add a new review for a university.",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "review_text": {
+                    "type": "string",
+                    "description": "The text of the review."
+                  },
+                  "university": {
+                    "type": "string",
+                    "description": "The name of the university."
+                  },
+                  "rating": {
+                    "type": "integer",
+                    "description": "The rating given for the review."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Review added successfully"
+          },
+          "400": {
+            "description": "Bad request, missing required fields"
+          },
+          "401": {
+            "description": "Unauthorized request"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update a review",
+        "tags": [
+          "reviews"
+        ],
+        "description": "Update the text or rating of a review.",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "review_id": {
+                    "type": "string",
+                    "description": "The ID of the review to be updated."
+                  },
+                  "review_text": {
+                    "type": "string",
+                    "description": "The updated text of the review."
+                  },
+                  "rating": {
+                    "type": "integer",
+                    "description": "The updated rating of the review."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Review updated successfully"
+          },
+          "400": {
+            "description": "Bad request, missing required fields or insufficient permissions"
+          },
+          "401": {
+            "description": "Unauthorized request"
+          },
+          "404": {
+            "description": "Review does not exist"
+          }
+        }
+      }
+    },
+    "/reviews/{university}": {
+      "get": {
+        "summary": "Get reviews by university",
+        "tags": [
+          "reviews"
+        ],
+        "description": "Retrieve reviews for a specific university.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "university",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The name of the university."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of reviews for the university"
+          },
+          "404": {
+            "description": "Review database query failed"
+          }
+        }
+      }
+    },
+    "/reviews/recommendation/{university}": {
+      "get": {
+        "summary": "Get review recommendations by university",
+        "tags": [
+          "reviews"
+        ],
+        "description": "Retrieve review recommendations for a specific university.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "university",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The name of the university."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of review recommendations for the university"
+          },
+          "404": {
+            "description": "Review database query failed"
+          }
+        }
+      }
+    },
+    "/uni_majors": {
+      "get": {
+        "summary": "Get all university majors",
+        "tags": [
+          "uni_majors"
+        ],
+        "description": "Retrieve a list of all university majors.",
+        "responses": {
+          "200": {
+            "description": "A list of university majors"
+          },
+          "404": {
+            "description": "University majors database query failed"
+          }
+        }
+      }
+    },
+    "/uni_majors/{university}": {
+      "get": {
+        "summary": "Get university majors by name",
+        "tags": [
+          "uni_majors"
+        ],
+        "description": "Retrieve a list of university majors for a specific university.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "university",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The name of the university."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of university majors for the specified university"
+          },
+          "404": {
+            "description": "University majors database query failed"
+          }
+        }
+      }
+    },
+    "/uni_tags": {
+      "get": {
+        "summary": "Get all university tags",
+        "tags": [
+          "uni_tags"
+        ],
+        "description": "Retrieve a list of all university tags.",
+        "responses": {
+          "200": {
+            "description": "A list of university tags"
+          },
+          "404": {
+            "description": "University tags database query failed"
+          }
+        }
+      }
+    },
+    "/uni_tags/{university}": {
+      "get": {
+        "summary": "Get university tags by name",
+        "tags": [
+          "uni_tags"
+        ],
+        "description": "Retrieve a list of university tags for a specific university.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "university",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The name of the university."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of university tags for the specified university"
+          },
+          "404": {
+            "description": "University tags database query failed"
+          }
+        }
+      }
+    },
+    "/uni_users": {
+      "get": {
+        "summary": "Get all users and their corresponding universities",
+        "tags": [
+          "uni_users"
+        ],
+        "description": "Retrieve a list of all users and their corresponding universities. Only accessible to admins or the authenticated user.",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of users and their corresponding universities"
+          },
+          "401": {
+            "description": "Unauthorized request"
+          },
+          "404": {
+            "description": "User database query failed"
+          }
+        }
+      }
+    },
+    "/universities": {
+      "get": {
+        "summary": "Get universities",
+        "tags": [
+          "university"
+        ],
+        "description": "Retrieve a list of universities based on various filters such as continent, GPA, name, location, and majors.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "continent",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter by continent."
+          },
+          {
+            "in": "query",
+            "name": "gpa",
+            "schema": {
+              "type": "number"
+            },
+            "description": "Filter by GPA."
+          },
+          {
+            "in": "query",
+            "name": "name",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter by name (search)."
+          },
+          {
+            "in": "query",
+            "name": "location",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter by location."
+          },
+          {
+            "in": "query",
+            "name": "major",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter by major(s)."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of universities"
+          },
+          "404": {
+            "description": "Universities not found"
+          }
+        }
+      }
+    },
+    "/universities/all": {
+      "get": {
+        "summary": "Get all university names",
+        "tags": [
+          "university"
+        ],
+        "description": "Retrieve a list of all university names.",
+        "responses": {
+          "200": {
+            "description": "A list of university names"
+          },
+          "404": {
+            "description": "Universities database call failed"
+          }
+        }
+      }
+    },
+    "/universities/name/{name}": {
+      "get": {
+        "summary": "Get university by name",
+        "tags": [
+          "university"
+        ],
+        "description": "Retrieve a university by its name.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The name of the university."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The requested university"
+          },
+          "404": {
+            "description": "University does not exist"
+          }
+        }
+      }
+    },
+    "/universities/image/{name}/": {
+      "get": {
+        "summary": "Get university image by name",
+        "tags": [
+          "university"
+        ],
+        "description": "Retrieve the image of a university by its name.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The name of the university."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The requested image"
+          },
+          "404": {
+            "description": "University does not exist or has no image attached"
+          }
+        }
+      }
+    },
+    "/universities/search/{searchTerm}": {
+      "get": {
+        "summary": "Search for universities",
+        "tags": [
+          "university"
+        ],
+        "description": "Search for universities by a search term.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "searchTerm",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The search term."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of universities matching the search term"
+          },
+          "404": {
+            "description": "Universities not found"
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "summary": "User login",
+        "tags": [
+          "dev"
+        ],
+        "description": "Authenticate user and generate access token.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "description": "The user's email."
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "The user's password."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful login, returns access token and user data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string",
+                      "description": "The access token."
+                    },
+                    "user_data": {
+                      "type": "object",
+                      "description": "The user's data."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request, missing email or incorrect email/password."
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "summary": "Get user information",
+        "tags": [
+          "users"
+        ],
+        "description": "Retrieve user information based on the user's role.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User information retrieved successfully."
+          },
+          "404": {
+            "description": "User information not found or database query failed."
+          }
+        }
+      },
+      "put": {
+        "summary": "Update user information",
+        "tags": [
+          "users"
+        ],
+        "description": "Update user information based on the authenticated user.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "image_filename": {
+                    "type": "string"
+                  },
+                  "flavor_text": {
+                    "type": "string"
+                  },
+                  "year_on_exchange": {
+                    "type": "integer"
+                  },
+                  "exchange_duration": {
+                    "type": "integer"
+                  },
+                  "university_name": {
+                    "type": "string"
+                  },
+                  "handle": {
+                    "type": "string"
+                  },
+                  "exchange_name": {
+                    "type": "string"
+                  },
+                  "major": {
+                    "type": "string"
+                  },
+                  "aspire": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User information updated successfully."
+          },
+          "404": {
+            "description": "Update failed."
+          }
+        }
+      },
+      "post": {
+        "summary": "Create new user",
+        "tags": [
+          "users"
+        ],
+        "description": "Create a new user and insert into the database.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "image_filename": {
+                    "type": "string"
+                  },
+                  "flavor_text": {
+                    "type": "string"
+                  },
+                  "year_on_exchange": {
+                    "type": "integer"
+                  },
+                  "exchange_duration": {
+                    "type": "integer"
+                  },
+                  "handle": {
+                    "type": "string"
+                  },
+                  "exchange_name": {
+                    "type": "string"
+                  },
+                  "major": {
+                    "type": "string"
+                  },
+                  "aspire": {
+                    "type": "string"
+                  },
+                  "interests": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "New user created successfully."
+          },
+          "404": {
+            "description": "Update failed."
+          }
+        }
+      }
+    },
+    "/users/interests": {
+      "get": {
+        "summary": "Get user interests",
+        "tags": [
+          "users"
+        ],
+        "description": "Retrieve user interests.",
+        "responses": {
+          "200": {
+            "description": "User interests retrieved successfully."
+          },
+          "404": {
+            "description": "Interest database query failed."
+          }
+        }
+      }
+    },
+    "/users/interests/{user_email}": {
+      "get": {
+        "summary": "Get user interests by email",
+        "tags": [
+          "users"
+        ],
+        "description": "Retrieve user interests by email.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "user_email",
+            "required": true,
+            "description": "Email of the user to retrieve interests for.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User interests retrieved successfully."
+          },
+          "404": {
+            "description": "Failed to fetch user interests."
+          }
+        }
+      }
+    },
+    "/users/email/{email}": {
+      "get": {
+        "summary": "Get user by email",
+        "tags": [
+          "users"
+        ],
+        "description": "Retrieve user information by email.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "email",
+            "required": true,
+            "description": "Email of the user to retrieve.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User information retrieved successfully."
+          },
+          "404": {
+            "description": "User information not found or database query failed."
+          }
+        }
+      }
+    },
+    "/users/university/{university}": {
+      "get": {
+        "summary": "Get users by university",
+        "tags": [
+          "users"
+        ],
+        "description": "Retrieve users by university.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "university",
+            "required": true,
+            "description": "Name of the university to retrieve users for.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Users retrieved successfully."
+          },
+          "404": {
+            "description": "User database query failed."
+          }
+        }
+      }
+    },
+    "/api/healthcheck": {
+      "get": {
+        "tags": [
+          "health"
+        ],
+        "operationId": "health_check",
+        "responses": {
+          "200": {
+            "description": "Recommender API healthy"
+          }
+        }
+      }
+    },
+    "/api/recommendation": {
+      "get": {
+        "tags": [
+          "recommender"
+        ],
+        "operationId": "get_recommendation_score",
+        "parameters": [
+          {
+            "name": "university_name",
+            "in": "path",
+            "description": "university name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Recommendation for single university retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecommendationWithFreshness"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecommendationError"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "External API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecommendationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/recommendation_all": {
+      "get": {
+        "tags": [
+          "recommender"
+        ],
+        "operationId": "get_recommendation_score_all",
+        "responses": {
+          "200": {
+            "description": "Recommendation for all universities retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Recommendation"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecommendationError"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "External API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecommendationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/": {
+      "get": {
+        "summary": "Root",
+        "operationId": "root__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "type": "object",
+                  "title": "Response Root  Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/similarity": {
+      "get": {
+        "summary": "Get Similarity",
+        "operationId": "get_similarity_similarity_get",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SimilarityObject"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWTBearer": []
+          },
+          {
+            "JWTBearer": []
+          }
+        ]
+      }
+    },
+    "/similarity_all": {
+      "get": {
+        "summary": "Get User Universities Similarity",
+        "operationId": "get_user_universities_similarity_similarity_all_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWTBearer": []
+          },
+          {
+            "JWTBearer": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Recommendation": {
+        "type": "object",
+        "required": [
+          "name",
+          "success",
+          "rating"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Singapore Management University"
+          },
+          "rating": {
+            "type": "number",
+            "format": "float",
+            "example": "0.5"
+          },
+          "success": {
+            "type": "boolean",
+            "example": "true"
+          }
+        }
+      },
+      "RecommendationError": {
+        "type": "object",
+        "required": [
+          "success",
+          "message"
+        ],
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "magic error"
+          },
+          "success": {
+            "type": "boolean",
+            "example": "false"
+          }
+        }
+      },
+      "RecommendationWithFreshness": {
+        "type": "object",
+        "required": [
+          "success",
+          "fresh",
+          "rating"
+        ],
+        "properties": {
+          "fresh": {
+            "type": "boolean",
+            "example": "true"
+          },
+          "rating": {
+            "type": "number",
+            "format": "float",
+            "example": "0.5"
+          },
+          "success": {
+            "type": "boolean",
+            "example": "true"
+          }
+        }
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "SimilarityObject": {
+        "properties": {
+          "university_name": {
+            "type": "string",
+            "title": "University Name"
+          }
+        },
+        "type": "object",
+        "required": [
+          "university_name"
+        ],
+        "title": "SimilarityObject"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    },
+    "securitySchemes": {
+      "JWTBearer": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  }
+}

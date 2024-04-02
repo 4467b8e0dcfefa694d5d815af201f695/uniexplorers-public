@@ -1,0 +1,15 @@
+{
+  "name": "generate_docs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "gen_api.js",
+  "scripts": {
+    "generate_docs": "node gen_api.js"
+  },
+  "dependencies": {
+    "openapi-merge": "^1.3.2",
+    "swagger-jsdoc": "^6.2.8"
+  },
+  "author": "",
+  "license": "ISC"
+}

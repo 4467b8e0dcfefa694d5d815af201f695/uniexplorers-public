@@ -1,0 +1,96 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.32.0 (HEAD)
+  labels:
+    io.kompose.service: notif-server
+  name: notif-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: notif-server
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.32.0 (HEAD)
+      labels:
+        io.kompose.network/uniexplorers-backend-default: "true"
+        io.kompose.service: notif-server
+    spec:
+      containers:
+        - env:
+            - name: BROKER_HOST
+              valueFrom:
+                configMapKeyRef:
+                  key: BROKER_HOST
+                  name: notif-env
+            - name: BROKER_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  key: BROKER_PASSWORD
+                  name: notif-env
+            - name: BROKER_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: BROKER_PORT
+                  name: notif-env
+            - name: BROKER_USER
+              valueFrom:
+                configMapKeyRef:
+                  key: BROKER_USER
+                  name: notif-env
+            - name: FORUM_DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  key: FORUM_DB_HOST
+                  name: notif-env
+            - name: FORUM_DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  key: FORUM_DB_NAME
+                  name: notif-env
+            - name: FORUM_DB_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  key: FORUM_DB_PASSWORD
+                  name: notif-env
+            - name: FORUM_DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: FORUM_DB_PORT
+                  name: notif-env
+            - name: FORUM_DB_USER
+              valueFrom:
+                configMapKeyRef:
+                  key: FORUM_DB_USER
+                  name: notif-env
+            - name: GRPC_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: GRPC_PORT
+                  name: notif-env
+            - name: HTTP_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: HTTP_PORT
+                  name: notif-env
+            - name: ORIGINS
+              valueFrom:
+                configMapKeyRef:
+                  key: ORIGINS
+                  name: notif-env
+            - name: WS_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: WS_PORT
+                  name: notif-env
+          image: jjlim159/uniexplorers-notif-server:latest
+          name: notif-server
+          ports:
+            - containerPort: 8080
+            - containerPort: 9999
+      restartPolicy: Always

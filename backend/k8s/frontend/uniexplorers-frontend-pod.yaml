@@ -1,0 +1,98 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.32.0 (HEAD)
+  labels:
+    io.kompose.network/uniexplorers-frontend-default: "true"
+    io.kompose.service: uniexplorers-frontend
+  name: uniexplorers-frontend
+spec:
+  containers:
+    - env:
+        - name: VITE_API_GATEWAY
+          valueFrom:
+            configMapKeyRef:
+              key: VITE_API_GATEWAY
+              name: uniexplorers-frontend-env
+        - name: VITE_API_URL
+          valueFrom:
+            configMapKeyRef:
+              key: VITE_API_URL
+              name: uniexplorers-frontend-env
+        - name: VITE_AUTH_BACKEND
+          valueFrom:
+            configMapKeyRef:
+              key: VITE_AUTH_BACKEND
+              name: uniexplorers-frontend-env
+        - name: VITE_BACKEND
+          valueFrom:
+            configMapKeyRef:
+              key: VITE_BACKEND
+              name: uniexplorers-frontend-env
+        - name: VITE_CLERK_PUBLISHABLE_KEY
+          valueFrom:
+            configMapKeyRef:
+              key: VITE_CLERK_PUBLISHABLE_KEY
+              name: uniexplorers-frontend-env
+        - name: VITE_FORUM_BACKEND
+          valueFrom:
+            configMapKeyRef:
+              key: VITE_FORUM_BACKEND
+              name: uniexplorers-frontend-env
+        - name: VITE_GOOGLE_BACKEND
+          valueFrom:
+            configMapKeyRef:
+              key: VITE_GOOGLE_BACKEND
+              name: uniexplorers-frontend-env
+        - name: VITE_GOOGLE_MAP_API_KEY
+          valueFrom:
+            configMapKeyRef:
+              key: VITE_GOOGLE_MAP_API_KEY
+              name: uniexplorers-frontend-env
+        - name: VITE_IMAGES_URL
+          valueFrom:
+            configMapKeyRef:
+              key: VITE_IMAGES_URL
+              name: uniexplorers-frontend-env
+        - name: VITE_IMAGE_BACKEND
+          valueFrom:
+            configMapKeyRef:
+              key: VITE_IMAGE_BACKEND
+              name: uniexplorers-frontend-env
+        - name: VITE_NOTIF_GRPC
+          valueFrom:
+            configMapKeyRef:
+              key: VITE_NOTIF_GRPC
+              name: uniexplorers-frontend-env
+        - name: VITE_NOTIF_WS
+          valueFrom:
+            configMapKeyRef:
+              key: VITE_NOTIF_WS
+              name: uniexplorers-frontend-env
+        - name: VITE_RECOMMENDER_BACKEND
+          valueFrom:
+            configMapKeyRef:
+              key: VITE_RECOMMENDER_BACKEND
+              name: uniexplorers-frontend-env
+        - name: VITE_SIMILARITY_BACKEND
+          valueFrom:
+            configMapKeyRef:
+              key: VITE_SIMILARITY_BACKEND
+              name: uniexplorers-frontend-env
+        - name: VITE_UNI_BACKEND
+          valueFrom:
+            configMapKeyRef:
+              key: VITE_UNI_BACKEND
+              name: uniexplorers-frontend-env
+        - name: VITE_USER_BACKEND
+          valueFrom:
+            configMapKeyRef:
+              key: VITE_USER_BACKEND
+              name: uniexplorers-frontend-env
+      image: jjlim159/uniexplorers-frontend:latest
+      name: uniexplorers-frontend
+      ports:
+        - containerPort: 80
+  restartPolicy: OnFailure

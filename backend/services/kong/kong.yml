@@ -1,0 +1,246 @@
+_format_version: "3.0"
+_transform: true
+
+services:
+  - name: uni-service
+    host: uni-server
+    port: 8080
+    path: /
+    protocol: http
+    routes:
+      - name: uni-routes
+        paths:
+          - /university-api
+        protocols:
+          - http
+          - https
+    plugins:
+      - name: rate-limiting
+        config:
+          minute: 100
+          policy: local
+
+  - name: location-service
+    host: location-server
+    port: 8080
+    path: /
+    protocol: http
+    routes:
+      - name: location-routes
+        paths:
+          - /location-api
+        protocols:
+          - http
+          - https
+    plugins:
+      - name: rate-limiting
+        config:
+          minute: 100
+          policy: local
+
+  - name: user-service
+    host: user-server
+    port: 8080
+    path: /
+    protocol: http
+    routes:
+      - name: user-routes
+        paths:
+          - /user-api
+        protocols:
+          - http
+          - https
+    plugins:
+      - name: rate-limiting
+        config:
+          minute: 100
+          policy: local
+
+  - name: image-service
+    host: image-server
+    port: 8083
+    path: /
+    protocol: http
+    routes:
+      - name: image-routes
+        paths:
+          - /image-api
+        methods:
+          - GET
+          - POST
+          - PUT
+          - OPTIONS
+        protocols:
+          - http
+          - https
+
+  - name: forum-service
+    host: forum-server
+    port: 8080
+    path: /
+    protocol: http
+    routes:
+      - name: forum-routes
+        paths:
+          - /forum-api
+        protocols:
+          - http
+          - https
+    plugins:
+      - name: rate-limiting
+        config:
+          minute: 100
+          policy: local
+
+  - name: notification-service
+    host: notif-server
+    port: 8080
+    path: /
+    protocol: http
+    routes:
+      - name: notif-routes
+        paths:
+          - /notif-api
+        protocols:
+          - http
+          - https
+    plugins:
+      - name: rate-limiting
+        config:
+          minute: 100
+          policy: local
+
+  - name: notification-websocket
+    host: notif-server
+    port: 9999
+    path: /
+    protocol: http
+    routes:
+      - name: notif-ws-routes
+        paths:
+          - /notif-ws
+        protocols:
+          - http
+          - https
+        headers:
+          Connection: [Upgrade]
+          Upgrade: [WebSocket]
+    plugins:
+      - name: rate-limiting
+        config:
+          minute: 100
+
+  - name: chat-service
+    host: chat-server
+    port: 8080
+    path: /
+    protocol: http
+    routes:
+      - name: chat-routes
+        paths:
+          - /chat-api
+        protocols:
+          - http
+          - https
+    plugins:
+      - name: rate-limiting
+        config:
+          minute: 100
+          policy: local
+
+  - name: similarity-service
+    host: similarity-server
+    port: 8080
+    path: /
+    protocol: http
+    routes:
+      - name: similarity-routes
+        paths:
+          - /similarity-api
+        protocols:
+          - http
+          - https
+
+  - name: recommender-service
+    host: recommender
+    port: 8080
+    path: /
+    protocol: http
+    routes:
+      - name: recommender-routes
+        paths:
+          - /recommender-api
+        protocols:
+          - http
+          - https
+    plugins:
+      - name: rate-limiting
+        config:
+          minute: 100
+          policy: local
+  
+  - name: telegram-service
+    host: telegram
+    port: 12069
+    path: /
+    protocol: http
+    routes:
+      - name: telegram-api-routes
+        paths:
+          - /telegram-api
+        protocols:
+          - http
+          - https
+    plugins:
+      - name: rate-limiting
+        config:
+          minute: 100
+          policy: local
+
+plugins:
+  - name: cors
+    config:
+      origins:
+        - "*"
+      methods:
+        - HEAD
+        - GET
+        - POST
+        - PUT
+        - PATCH
+        - DELETE
+        - OPTIONS
+      headers:
+        - Access-Control-Allow-Origin
+        - Accept
+        - Accept-Version
+        - Content-Length
+        - Content-MD5
+        - Content-Type
+        - Date
+        - Authorization
+        - Cache-Control
+      exposed_headers:
+        - Authorization
+        - Content-Type
+      credentials: true
+      max_age: 3600
+      preflight_continue: false
+
+  - name: prometheus
+    config:
+      per_consumer: false
+      bandwidth_metrics: true
+      latency_metrics: true
+      status_code_metrics: true
+      upstream_health_metrics: true
+
+  - name: custom-auth
+    config:
+      url: http://auth-server:8089/auth
+      public_paths:
+        - /image-api
+        - /notif-ws
+        - /notif-api
+        - /chat-api
+        # TODO: REmove notif-api and notif-ws if can

@@ -1,0 +1,172 @@
+[
+  {
+    "name": "University of California, Berkeley",
+    "country": "United States",
+    "description": "The University of California, Berkeley offers a wide range of exchange programs for students interested in various academic fields. The programs provide an opportunity to immerse yourself in the vibrant campus community while studying at one of the top-ranked universities in the world.",
+    "duration": "1-2 semesters",
+    "eligibility": {
+      "students": "Undergraduate and graduate students from partner institutions",
+      "minimumGPA": 3.5,
+      "acceptedFaculties": [
+        "Arts",
+        "Sciences",
+        "Engineering"
+      ]
+    },
+    "applicationDeadline": "March 1st",
+    "imagePath": "/images/uc_berkeley.png"
+  },
+  {
+    "name": "Harvard University",
+    "country": "United States",
+    "description": "Harvard University offers exchange programs that allow students to experience its renowned academic environment. Exchange students have access to a diverse range of courses and can engage in research projects with faculty members.",
+    "duration": "1 semester to 1 academic year",
+    "eligibility": {
+      "students": "Undergraduate and graduate students from partner institutions",
+      "minimumGPA": 3.5,
+      "acceptedFaculties": [
+        "Arts",
+        "Sciences",
+        "Engineering"
+      ]
+    },
+    "applicationDeadline": "December 15th",
+    "imagePath": "/images/harvard.png"
+  },
+  {
+    "name": "Yale University",
+    "country": "United States",
+    "description": "Yale University offers exchange programs that provide students with a rigorous academic experience. Exchange students have the opportunity to engage with world-class faculty members and access a wide range of interdisciplinary courses.",
+    "duration": "1 semester to 1 academic year",
+    "eligibility": {
+      "students": "Undergraduate and graduate students from partner institutions",
+      "minimumGPA": 3.5,
+      "acceptedFaculties": [
+        "Arts",
+        "Sciences",
+        "Engineering"
+      ]
+    },
+    "applicationDeadline": "October 15th",
+    "imagePath": "/images/yale.png"
+  },
+  {
+    "name": "Columbia University",
+    "country": "United States",
+    "description": "Columbia University offers exchange programs that allow students to immerse themselves in a dynamic academic community. Exchange students can choose from a wide range of disciplines and engage in research, internships, and cultural activities.",
+    "duration": "1 semester to 1 academic year",
+    "eligibility": {
+      "students": "Undergraduate and graduate students from partner institutions",
+      "minimumGPA": 3.5,
+      "acceptedFaculties": [
+        "Arts",
+        "Sciences",
+        "Engineering"
+      ]
+    },
+    "applicationDeadline": "November 1st",
+    "imagePath": "/images/columbia.png"
+  },
+  {
+    "name": "University of Oxford",
+    "country": "United Kingdom",
+    "description": "The University of Oxford offers exchange programs that provide students with a chance to study at one of the oldest and most prestigious universities in the world. Exchange students can choose from a wide range of subjects and benefit from the university's rich academic resources.",
+    "duration": "1 term to 1 academic year",
+    "eligibility": {
+      "students": "Undergraduate and graduate students from partner institutions",
+      "minimumGPA": 3.5,
+      "acceptedFaculties": [
+        "Arts",
+        "Sciences",
+        "Engineering"
+      ]
+    },
+    "applicationDeadline": "January 15th",
+    "imagePath": "/images/oxford.png"
+  },
+  {
+    "name": "Imperial College London",
+    "country": "United Kingdom",
+    "description": "Imperial College London offers exchange programs for students interested in science, engineering, medicine, and business. The programs provide an opportunity to study alongside world-class researchers and gain valuable international experience.",
+    "duration": "1-2 semesters",
+    "eligibility": {
+      "students": "Undergraduate and graduate students from partner institutions",
+      "minimumGPA": 3.5,
+      "acceptedFaculties": [
+        "Arts",
+        "Sciences",
+        "Engineering"
+      ]
+    },
+    "applicationDeadline": "February 28th",
+    "imagePath": "/images/imperial.png"
+  },
+  {
+    "name": "University of Cambridge",
+    "country": "United Kingdom",
+    "description": "The University of Cambridge offers exchange programs that allow students to study at one of the world's leading academic institutions. Exchange students can engage with renowned scholars, participate in research, and experience the vibrant student life in Cambridge.",
+    "duration": "1 term to 1 academic year",
+    "eligibility": {
+      "students": "Undergraduate and graduate students from partner institutions",
+      "minimumGPA": 3.5,
+      "acceptedFaculties": [
+        "Arts",
+        "Sciences",
+        "Engineering"
+      ]
+    },
+    "applicationDeadline": "October 31st",
+    "imagePath": "/images/cambridge.png"
+  },
+  {
+    "name": "The University of Sydney",
+    "country": "Australia",
+    "description": "The University of Sydney offers exchange programs that allow students to explore a vibrant academic and cultural environment. Exchange students can choose from a wide range of disciplines and participate in extracurricular activities while experiencing Australian campus life.",
+    "duration": "1 or 2 semesters",
+    "eligibility": {
+      "students": "Undergraduate and graduate students from partner institutions",
+      "minimumGPA": 3.5,
+      "acceptedFaculties": [
+        "Arts",
+        "Sciences",
+        "Engineering"
+      ]
+    },
+    "applicationDeadline": "July 1st",
+    "imagePath": "/images/sydney.png"
+  },
+  {
+    "name": "The University of Melbourne",
+    "country": "Australia",
+    "description": "The University of Melbourne offers exchange programs for students looking to study in a world-class institution. Exchange students have the opportunity to engage with leading researchers and gain an international perspective on their field of study.",
+    "duration": "1 or 2 semesters",
+    "eligibility": {
+      "students": "Undergraduate and graduate students from partner institutions",
+      "minimumGPA": 3.5,
+      "acceptedFaculties": [
+        "Arts",
+        "Sciences",
+        "Engineering"
+      ]
+    },
+    "applicationDeadline": "June 15th",
+    "imagePath": "/images/melbourne.png"
+  },
+  {
+    "name": "Korea University",
+    "country": "South Korea",
+    "description": "Korea University offers exchange programs that provide students with an opportunity to experience South Korean culture and education. Exchange students can choose from a variety of academic disciplines and engage in cultural activities.",
+    "duration": "1 semester to 1 academic year",
+    "eligibility": {
+      "students": "Undergraduate and graduate students from partner institutions",
+      "minimumGPA": 3.5,
+      "acceptedFaculties": [
+        "Arts",
+        "Sciences",
+        "Engineering"
+      ]
+    },
+    "applicationDeadline": "June 30th",
+    "imagePath": "/images/korea_university.png"
+  }
+]

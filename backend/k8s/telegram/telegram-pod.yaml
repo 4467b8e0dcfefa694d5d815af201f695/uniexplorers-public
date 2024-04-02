@@ -1,0 +1,77 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.32.0 (HEAD)
+  labels:
+    io.kompose.network/uniexplorers-backend-default: "true"
+    io.kompose.service: telegram
+  name: telegram
+spec:
+  containers:
+    - env:
+        - name: TELEGRAM_API_HASH
+          valueFrom:
+            configMapKeyRef:
+              key: TELEGRAM_API_HASH
+              name: telegram-env
+        - name: TELEGRAM_API_ID
+          valueFrom:
+            configMapKeyRef:
+              key: TELEGRAM_API_ID
+              name: telegram-env
+        - name: TELEGRAM_PHONE_NUMBER
+          valueFrom:
+            configMapKeyRef:
+              key: TELEGRAM_PHONE_NUMBER
+              name: telegram-env
+        - name: UNI_DB_CLIENT
+          valueFrom:
+            configMapKeyRef:
+              key: UNI_DB_CLIENT
+              name: telegram-env
+        - name: UNI_DB_EXTERNAL_PORT
+          valueFrom:
+            configMapKeyRef:
+              key: UNI_DB_EXTERNAL_PORT
+              name: telegram-env
+        - name: UNI_DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              key: UNI_DB_HOST
+              name: telegram-env
+        - name: UNI_DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              key: UNI_DB_NAME
+              name: telegram-env
+        - name: UNI_DB_PASSWORD
+          valueFrom:
+            configMapKeyRef:
+              key: UNI_DB_PASSWORD
+              name: telegram-env
+        - name: UNI_DB_PORT
+          valueFrom:
+            configMapKeyRef:
+              key: UNI_DB_PORT
+              name: telegram-env
+        - name: UNI_DB_USER
+          valueFrom:
+            configMapKeyRef:
+              key: UNI_DB_USER
+              name: telegram-env
+      image: jjlim159/uniexplorers-telegram:latest
+      livenessProbe:
+        exec:
+          command:
+            - sh
+            - -c
+            - curl --fail http://localhost:12069 || exit 1
+        failureThreshold: 5
+        periodSeconds: 10
+        timeoutSeconds: 10
+      name: telegram-app
+      ports:
+        - containerPort: 12069
+  restartPolicy: OnFailure

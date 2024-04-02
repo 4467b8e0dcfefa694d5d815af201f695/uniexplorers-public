@@ -1,0 +1,192 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.32.0 (HEAD)
+  labels:
+    io.kompose.network/uniexplorers-backend-default: "true"
+    io.kompose.service: user-server
+  name: user-server
+spec:
+  containers:
+    - env:
+        - name: FORUM_DB_CLIENT
+          valueFrom:
+            configMapKeyRef:
+              key: FORUM_DB_CLIENT
+              name: server-env
+        - name: FORUM_DB_EXTERNAL_PORT
+          valueFrom:
+            configMapKeyRef:
+              key: FORUM_DB_EXTERNAL_PORT
+              name: server-env
+        - name: FORUM_DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              key: FORUM_DB_HOST
+              name: server-env
+        - name: FORUM_DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              key: FORUM_DB_NAME
+              name: server-env
+        - name: FORUM_DB_PASSWORD
+          valueFrom:
+            configMapKeyRef:
+              key: FORUM_DB_PASSWORD
+              name: server-env
+        - name: FORUM_DB_PORT
+          valueFrom:
+            configMapKeyRef:
+              key: FORUM_DB_PORT
+              name: server-env
+        - name: FORUM_DB_URL
+          valueFrom:
+            configMapKeyRef:
+              key: FORUM_DB_URL
+              name: server-env
+        - name: FORUM_DB_USER
+          valueFrom:
+            configMapKeyRef:
+              key: FORUM_DB_USER
+              name: server-env
+        - name: MONGO_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              key: MONGO_DATABASE
+              name: server-env
+        - name: MONGO_HOST
+          valueFrom:
+            configMapKeyRef:
+              key: MONGO_HOST
+              name: server-env
+        - name: MONGO_PASSWORD
+          valueFrom:
+            configMapKeyRef:
+              key: MONGO_PASSWORD
+              name: server-env
+        - name: MONGO_PORT
+          valueFrom:
+            configMapKeyRef:
+              key: MONGO_PORT
+              name: server-env
+        - name: MONGO_USERNAME
+          valueFrom:
+            configMapKeyRef:
+              key: MONGO_USERNAME
+              name: server-env
+        - name: NOTIF_SERVER
+          valueFrom:
+            configMapKeyRef:
+              key: NOTIF_SERVER
+              name: server-env
+        - name: ORIGIN
+          valueFrom:
+            configMapKeyRef:
+              key: ORIGIN
+              name: server-env
+        - name: SERVER_PORT
+          valueFrom:
+            configMapKeyRef:
+              key: SERVER_PORT
+              name: server-env
+        - name: TOKEN_SECRET
+          valueFrom:
+            configMapKeyRef:
+              key: TOKEN_SECRET
+              name: server-env
+        - name: UNI_DB_CLIENT
+          valueFrom:
+            configMapKeyRef:
+              key: UNI_DB_CLIENT
+              name: server-env
+        - name: UNI_DB_EXTERNAL_PORT
+          valueFrom:
+            configMapKeyRef:
+              key: UNI_DB_EXTERNAL_PORT
+              name: server-env
+        - name: UNI_DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              key: UNI_DB_HOST
+              name: server-env
+        - name: UNI_DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              key: UNI_DB_NAME
+              name: server-env
+        - name: UNI_DB_PASSWORD
+          valueFrom:
+            configMapKeyRef:
+              key: UNI_DB_PASSWORD
+              name: server-env
+        - name: UNI_DB_PORT
+          valueFrom:
+            configMapKeyRef:
+              key: UNI_DB_PORT
+              name: server-env
+        - name: UNI_DB_URL
+          valueFrom:
+            configMapKeyRef:
+              key: UNI_DB_URL
+              name: server-env
+        - name: UNI_DB_USER
+          valueFrom:
+            configMapKeyRef:
+              key: UNI_DB_USER
+              name: server-env
+        - name: USER_DB_CLIENT
+          valueFrom:
+            configMapKeyRef:
+              key: USER_DB_CLIENT
+              name: server-env
+        - name: USER_DB_EXTERNAL_PORT
+          valueFrom:
+            configMapKeyRef:
+              key: USER_DB_EXTERNAL_PORT
+              name: server-env
+        - name: USER_DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              key: USER_DB_HOST
+              name: server-env
+        - name: USER_DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              key: USER_DB_NAME
+              name: server-env
+        - name: USER_DB_PASSWORD
+          valueFrom:
+            configMapKeyRef:
+              key: USER_DB_PASSWORD
+              name: server-env
+        - name: USER_DB_PORT
+          valueFrom:
+            configMapKeyRef:
+              key: USER_DB_PORT
+              name: server-env
+        - name: USER_DB_URL
+          valueFrom:
+            configMapKeyRef:
+              key: USER_DB_URL
+              name: server-env
+        - name: USER_DB_USER
+          valueFrom:
+            configMapKeyRef:
+              key: USER_DB_USER
+              name: server-env
+      livenessProbe:
+        exec:
+          command:
+            - sh
+            - -c
+            - "curl --fail http://localhost:8080 || exit 1"
+        failureThreshold: 5
+        periodSeconds: 10
+        timeoutSeconds: 10
+      name: user-server
+      image: jjlim159/uniexplorers-user-server:latest
+      ports:
+        - containerPort: 8080
+  restartPolicy: OnFailure

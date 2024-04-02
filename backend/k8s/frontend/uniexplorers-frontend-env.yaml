@@ -1,0 +1,23 @@
+apiVersion: v1
+data:
+  VITE_API_GATEWAY: http://localhost:8000
+  VITE_API_URL: http://localhost:8000
+  VITE_AUTH_BACKEND: http://localhost:8089
+  VITE_BACKEND: http://localhost:8000
+  VITE_CLERK_PUBLISHABLE_KEY: pk_test_YmV0dGVyLWplbm5ldC0yLmNsZXJrLmFjY291bnRzLmRldiQ
+  VITE_FORUM_BACKEND: http://localhost:8000/forum-api
+  VITE_GOOGLE_BACKEND: http://localhost:8000/location-api
+  VITE_GOOGLE_MAP_API_KEY: ""
+  VITE_IMAGE_BACKEND: http://localhost:8000/image-api
+  VITE_IMAGES_URL: http://localhost:8083
+  VITE_NOTIF_GRPC: http://localhost:8000/notif-api
+  VITE_NOTIF_WS: ws://localhost:8000/notif-ws
+  VITE_RECOMMENDER_BACKEND: http://localhost:8000/recommender-api
+  VITE_SIMILARITY_BACKEND: http://localhost:8000/similarity-api
+  VITE_UNI_BACKEND: http://localhost:8000/university-api
+  VITE_USER_BACKEND: http://localhost:8000/user-api
+kind: ConfigMap
+metadata:
+  labels:
+    io.kompose.service: uniexplorers-frontend-env
+  name: uniexplorers-frontend-env
