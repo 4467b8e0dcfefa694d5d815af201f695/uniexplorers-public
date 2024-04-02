@@ -182,6 +182,7 @@ export const useAuthStore = defineStore({
             this.websocket.onmessage = (event) => {
                 let notif = JSON.parse(event.data)
                 notif.commentBy = notif.comment_by
+                notif.threadId = notif.thread_id
                 if (notif.commentBy != this.getEmail) {
                     this.new_notif = true
                     this.notifications.unshift(notif)
